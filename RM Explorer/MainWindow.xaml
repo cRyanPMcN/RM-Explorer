@@ -1,0 +1,81 @@
+﻿<Window x:Class="RM_Explorer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RM_Explorer"
+        xmlns:prop="clr-namespace:RM_Explorer.Properties"
+        mc:Ignorable="d"
+        Title="File/Folder Explorer" Height="400" Width="600" Closed="Window_Closed" WindowStartupLocation="CenterScreen">
+    <!--<Window.Background>
+        <ImageBrush ImageSource="{x:Static prop:Resources}"
+    </Window.Background>-->
+    <Window.Resources>
+        <ResourceDictionary Source="stylesheet.xaml"/>
+    </Window.Resources>
+    <DockPanel>
+
+        <DockPanel DockPanel.Dock="Top">
+            <Button x:Name="btnFilePicker" DockPanel.Dock="Left" Content="{x:Static prop:Resources.btnFilePicker}" Margin="5" Click="btnFilePicker_Click"/>
+            <TextBox Name="txtLocation" DockPanel.Dock="Right" Text="{Binding location}" Margin="1 5 5 5" KeyDown="TextBox_KeyDown"/>
+        </DockPanel>
+
+        <Grid Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TreeView x:Name="tvDirectory"
+                  ItemsSource="{Binding root}"
+                  DockPanel.Dock="Left">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type TreeViewItem}" ItemsSource="{Binding Path=children}">
+                        <HierarchicalDataTemplate.Resources>
+                            <ResourceDictionary Source="stylesheet.xaml"/>
+                        </HierarchicalDataTemplate.Resources>
+                        <StackPanel HorizontalAlignment ="Left">
+                            <CheckBox IsTabStop="False" VerticalAlignment="Center" IsChecked="{Binding Path=isChecked}"/>
+                            <Image Source="{Binding Path=icon}" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=Name}"/>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+
+            <GridSplitter Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Column="1"/>
+
+            <Grid x:Name="grdDirInfo" Grid.Column="2" Margin="4 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1.5*"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Name="txtMessage" HorizontalAlignment="Center" FontSize="16" Grid.Row="0"/>
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="{x:Static prop:Resources.txtFolderCount}"/>
+                    <TextBlock Text="{Binding root.folderCount, StringFormat=N0}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="2">
+                    <TextBlock Text="{x:Static prop:Resources.txtFileCount}"/>
+                    <TextBlock Text="{Binding root.fileCount, StringFormat=N0}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="3">
+                    <TextBlock Text="{x:Static prop:Resources.txtFoldersSelected}"/>
+                    <TextBlock Text="{Binding root.selectedFolders, StringFormat=N0}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="4">
+                    <TextBlock Text="{x:Static prop:Resources.txtFilesSelected}"/>
+                    <TextBlock Text="{Binding root.selectedFiles, StringFormat=N0}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="5">
+                    <TextBlock Text="{x:Static prop:Resources.txtSizeSelected}"/>
+                    <TextBlock Text="{Binding root.selectedSize, StringFormat=N0}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>
